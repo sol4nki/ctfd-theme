@@ -284,7 +284,7 @@ h1.logo .accent{color:var(--accent);}
 
 .status-panel{
     width:100%;
-    max-width:660px;
+    // max-width:660px;
     border:1px solid var(--line);
     background:var(--panel);
     border-radius:6px;
@@ -353,7 +353,7 @@ h1.logo .accent{color:var(--accent);}
 .btn.primary{border-color:var(--accent);color:var(--accent);}
 .btn.primary:hover{background:var(--accent);color:var(--bg);}
 .btn.ghost:hover{border-color:var(--fg-dim);background:rgba(255,255,255,.03);}
-
+.btn.menu_idc{line-height: 1.5;}
 /* ---------- category strip ---------- */
 
 .categories{border-top:1px solid var(--line);background:var(--panel);}
@@ -419,4 +419,86 @@ h1.logo .accent{color:var(--accent);}
 .form-select {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e");
   background-size: 8px 10px;
+}
+
+.alert{
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--fg);
+}
+
+.alert-success{
+    border-color:var(--accent);
+    color:var(--accent);
+}
+
+.alert-danger{
+    border-color:#aa3333;
+    color:#ff7777;
+}
+
+.alert-warning{
+    border-color:#b58a00;
+    color:#ffd54d;
+}
+
+.text-muted{
+    color:var(--fg-dim)!important;
+}
+
+.form-control,
+.form-select{
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--fg);
+}
+
+.form-control::placeholder{
+    color:var(--fg-faint);
+}
+
+.form-control:focus,
+.form-select:focus{
+    background:var(--panel);
+    color:var(--fg);
+    border-color:var(--accent);
+    box-shadow:none;
+}
+
+.table{
+    --bs-table-bg:transparent;
+    --bs-table-color:var(--fg);
+    color:var(--fg);
+}
+
+.table th{
+    color:var(--fg-dim);
+    border-color:var(--line);
+}
+
+.table td{
+    border-color:var(--line);
+}
+
+.badge{
+    font-family:var(--font-display);
+}
+
+.card{
+    background:var(--panel);
+    border:1px solid var(--line);
+}
+
+.dropdown-menu{
+    background:var(--panel);
+    border:1px solid var(--line);
+}
+
+.dropdown-item{
+    color:var(--fg);
+}
+
+.dropdown-item:hover{
+    background:var(--accent-dim);
+    color:var(--accent);
 }

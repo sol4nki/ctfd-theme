@@ -1,142 +1,262 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="jumbotron">
-    <div class="container">
-      <h1>{% trans %}Users{% endtrans %}</h1>
-    </div>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        {% if q and field %}
-          <h5 class="text-muted text-center">
-            {% trans %}Searching for users with <strong>{{ field }}</strong> matching <strong>{{ q }}</strong>{% endtrans %}
-          </h5>
-          <h6 class="text-muted text-center pb-3">
-            {% trans page=users.page, total=users.total %}Page {{ page }} of {{ total }} results{% endtrans %}
-          </h6>
+
+<div class="container">
+
+    <div class="text-center mb-5">
+        <h1 class="h1">
+            USERS<span class="accent">.SYS</span>
+        </h1>
+
+        {% if q %}
+        <div class="alert alert-dark border mt-3 mb-4">
+            <strong>Search Results</strong>
+
+            {% if field %}
+            <span class="text-muted">
+                ({{ field|replace('_', ' ')|title }})
+            </span>
+            {% endif %}
+
+            <span class="hl ms-2">{{ q }}</span>
+        </div>
+        {% else %}
+        <p class="tagline">
+            Public operator database.
+        </p>
         {% endif %}
-
-        {% with form = Forms.users.PublicUserSearchForm(field=field, q=q) %}
-          <form method="GET" class="row justify-content-around align-items-center">
-            <div class="mb-3 col-md-2">
-              {{ form.field(class="form-select w-100") }}
-            </div>
-            <div class="mb-3 col-md-8">
-              {{ form.q(class="form-control w-100", placeholder=form.q.description) }}
-            </div>
-            <div class="mb-3 col-md-2">
-              <button type="submit" class="btn btn-primary w-100">
-                <i class="fas fa-search" aria-hidden="true"></i>
-              </button>
-            </div>
-          </form>
-        {% endwith %}
-      </div>
     </div>
 
-    <hr>
+    {% with form = Forms.users.PublicUserSearchForm(field=field, q=q) %}
+    <div class="status-panel mb-4">
 
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table table-striped align-middle">
-          <thead>
-          <tr>
-            <th>{% trans %}User{% endtrans %}</th>
-            <th>{% trans %}Website{% endtrans %}</th>
-            <th class="d-none d-md-table-cell">{% trans %}Affiliation{% endtrans %}</th>
-            <th class="d-none d-md-table-cell">{% trans %}Country{% endtrans %}</th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for user in users.items %}
-            <tr>
-              <td>
-                {% if scores_visible() %}
-                  <a href="{{ url_for('users.public', user_id=user.id) }}">
-                    {{ user.name | truncate(50) }}
-                  </a>
-                {% else %}
-                  <span>{{ user.name | truncate(50) }}</span>
-                {% endif %}
+        <div class="status-head">
+            <span>Search</span>
+        </div>
 
-                {% if user.bracket_id %}
-                  <span class="badge bg-secondary ms-2">{{ user.bracket.name }}</span>
-                {% endif %}
+        <div class="p-4">
+            <form method="GET">
+                <div class="row g-3">
 
-                {% if user.oauth_id %}
-                  <a href="https://majorleaguecyber.org/u/{{ user.name }}">
-                    <span class="badge bg-primary ms-2">{% trans %}Official{% endtrans %}</span>
-                  </a>
-                {% endif %}
-              </td>
+                    <div class="col-lg-3">
+                        {{ form.field(class="form-select") }}
+                    </div>
 
-              <td class="text-center" style="width: 10px;">
-                {% if user.website and (user.website.startswith('http://') or user.website.startswith('https://')) %}
-                  <a href="{{ user.website }}" target="_blank" rel="noopener">
-                    <i
-                        class="fas fa-external-link-alt" data-toggle="tooltip" data-placement="top"
-                        title="{{ user.website }}"
-                    ></i>
-                  </a>
-                {% endif %}
-              </td>
+                    <div class="col-lg-7">
+                        {{ form.q(
+                            class="form-control",
+                            placeholder=form.q.description
+                        ) }}
+                    </div>
 
-              <td class="d-none d-md-table-cell d-lg-table-cell">
-                {% if user.affiliation %}
-                  {% if user.affiliation | length > 50 %}
-                    <span data-toggle="tooltip" data-placement="top" title="{{ user.affiliation }}">
-									{% if user.affiliation %}{{ user.affiliation | truncate(50) }}{% endif %}
-								</span>
-                  {% else %}
-                    <span>
-									{% if user.affiliation %}{{ user.affiliation | truncate(50) }}{% endif %}
-								</span>
-                  {% endif %}
-                {% endif %}
-              </td>
-              <td class="d-none d-md-table-cell d-lg-table-cell">
-								<span>
-									{% if user.country %}
-                    <i class="flag-{{ user.country.lower() }}"></i>
-                    {{ lookup_country_code(user.country) }}
-                  {% endif %}
-								</span>
-              </td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </div>
+                    <div class="col-lg-2">
+                        <button
+                            class="btn primary w-100"
+                            type="submit"
+                        >
+                            SEARCH
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+    {% endwith %}
+
+    <div class="status-panel">
+
+        <div class="status-head">
+            <span>Results</span>
+            <span>{{ users.total }} USERS</span>
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table users-table table-hover mb-0">
+
+                <thead>
+                    <tr>
+                        <th style="width:45%">
+                            USER
+                        </th>
+
+                        <th style="width:8%">
+                            WEB
+                        </th>
+
+                        <th
+                            class="d-none d-md-table-cell"
+                            style="width:32%"
+                        >
+                            AFFILIATION
+                        </th>
+
+                        <th
+                            class="d-none d-md-table-cell"
+                            style="width:15%"
+                        >
+                            COUNTRY
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for user in users.items %}
+                <tr>
+
+                    <td>
+
+                        {% if scores_visible() %}
+                        <a
+                            class="user-link truncate-cell"
+                            href="{{ url_for('users.public', user_id=user.id) }}"
+                            title="{{ user.name }}"
+                        >
+                            {{ user.name }}
+                        </a>
+                        {% else %}
+                        <span
+                            class="truncate-cell"
+                            title="{{ user.name }}"
+                        >
+                            {{ user.name }}
+                        </span>
+                        {% endif %}
+
+                        {% if user.bracket_id %}
+                        <span class="badge bg-secondary ms-2">
+                            {{ user.bracket.name }}
+                        </span>
+                        {% endif %}
+
+                        {% if user.oauth_id %}
+                        <a
+                            href="https://majorleaguecyber.org/u/{{ user.name }}"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            <span class="badge bg-success ms-2">
+                                OFFICIAL
+                            </span>
+                        </a>
+                        {% endif %}
+
+                    </td>
+
+                    <td class="text-center">
+
+                        {% if user.website and (
+                            user.website.startswith('http://')
+                            or
+                            user.website.startswith('https://')
+                        ) %}
+                        <a
+                            href="{{ user.website }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="{{ user.website }}"
+                        >
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </td>
+
+                    <td class="d-none d-md-table-cell">
+
+                        {% if user.affiliation %}
+                        <span
+                            class="truncate-cell"
+                            title="{{ user.affiliation }}"
+                        >
+                            {{ user.affiliation }}
+                        </span>
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </td>
+
+                    <td class="d-none d-md-table-cell">
+
+                        {% if user.country %}
+                        <i class="flag-{{ user.country.lower() }}"></i>
+                        {{ lookup_country_code(user.country) }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
 
     {% if users.pages > 1 %}
-      <div class="row">
-        <div class="col-md-12">
-          <div class="text-center">
-            {% trans %}Page{% endtrans %} <br>
+    <div class="text-center mt-4">
 
-            {% if users.page != 1 %}
-              <a href="{{ prev_page }}">&lt;&lt;&lt;</a>
-            {% endif %}
+        {% if users.page > 1 %}
+        <a
+            class="btn ghost"
+            href="{{ url_for(
+                request.endpoint,
+                page=users.prev_num,
+                field=field,
+                q=q
+            ) }}"
+        >
+            <<< PREV
+        </a>
+        {% endif %}
 
-            <select class="page-select">
-              {% for page in range(1, users.pages + 1) %}
-                <option {% if users.page == page %}selected{% endif %}>{{ page }}</option>
-              {% endfor %}
-            </select>
+        <select
+            class="page-select form-select d-inline-block mx-2"
+        >
+            {% for page in range(1, users.pages + 1) %}
+            <option
+                {% if users.page == page %}
+                selected
+                {% endif %}
+            >
+                {{ page }}
+            </option>
+            {% endfor %}
+        </select>
 
-            {% if users.next_num %}
-              <a href="{{ next_page }}">&gt;&gt;&gt;</a>
-            {% endif %}
-          </div>
-        </div>
-      </div>
+        {% if users.next_num %}
+        <a
+            class="btn ghost"
+            href="{{ url_for(
+                request.endpoint,
+                page=users.next_num,
+                field=field,
+                q=q
+            ) }}"
+        >
+            NEXT >>>
+        </a>
+        {% endif %}
+
+    </div>
     {% endif %}
-  </div>
+
+</div>
+
 {% endblock %}
 
 {% block scripts %}
-  {{ Assets.js("assets/js/users/list.js") }}
+{{ Assets.js("assets/js/users/list.js") }}
 {% endblock %}
