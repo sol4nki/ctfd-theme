@@ -1,39 +1,182 @@
-<!-- read the og ctfd rewritten code and implement the proper naming format -->
-
 <header class="nav">
-  <div class="nav-inner">
-      <a class="brand" href="#"><span class="seg-host">root@d4rkc0de</span>:~$<span class="cursor"></span></a>
+    <div class="nav-inner">
+        <a class="brand" href="{{ url_for('views.static_html', route='/') }}">
+            <span class="seg-host">root@d4rkc0de</span>:~$
+            <span class="cursor"></span>
+        </a>
 
-      <nav class="nav-links" id="navLinks">
-          <a href="challenges.html" class="active">Challenges</a>
-          <a href="#scoreboard">Scoreboard</a>
-          <a href="#team">Team</a>
-          <a href="#users">Users</a>
-      </nav>
+        <nav class="nav-links" id="navLinks">
 
-      <div class="nav-right">
-          <button class="icon-btn" aria-label="Notifications" title="Notifications">
-              :3
-              <span class="dot"></span>
-          </button>
+            {% if Configs.account_visibility != 'admins' %}
+            <a
+                href="{{ url_for('users.listing') }}"
+                class="{{ 'active' if request.endpoint == 'users.listing' else '' }}">
+                Users
+            </a>
+            {% endif %}
 
-          <div class="profile" id="profile">
-              <button class="profile-btn" id="profileBtn" aria-haspopup="true" aria-expanded="false">
-                  <span class="avatar">0x</span>
-                  <span class="handle">helloworld</span>
-                  <span class="caret">▾</span>
-              </button>
-              <div class="profile-menu">
-                  <a href="#">Profile</a>
-                  <a href="#">Settings</a>
-                  <a href="#">Team Settings</a>
-                  <div class="divider"></div>
-                  <a href="#">Log in</a>
-                  <a href="#">Register</a>
-              </div>
-          </div>
-      </div>
+            {% if Configs.user_mode == 'teams' and Configs.account_visibility != 'admins' %}
+            <a
+                href="{{ url_for('teams.listing') }}"
+                class="{{ 'active' if request.endpoint == 'teams.listing' else '' }}">
+                Teams
+            </a>
+            {% endif %}
 
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">≡</button>
-  </div>
+            {% if Configs.account_visibility != 'admins' and Configs.score_visibility != 'admins' %}
+            <a
+                href="{{ url_for('scoreboard.listing') }}"
+                class="{{ 'active' if request.endpoint == 'scoreboard.listing' else '' }}">
+                Scoreboard
+            </a>
+            {% endif %}
+
+            <a
+                href="{{ url_for('challenges.listing') }}"
+                class="{{ 'active' if request.endpoint == 'challenges.listing' else '' }}">
+                Challenges
+            </a>
+
+            {% for page in Plugins.user_menu_pages %}
+            <a href="{{ page.route }}">
+                {{ page.title }}
+            </a>
+            {% endfor %}
+
+        </nav>
+        
+        <div class="nav-right">
+
+            {% if authed() %}
+
+            <a
+                href="{{ url_for('views.notifications') }}"
+                class="icon-btn"
+                aria-label="Notifications">
+                [!]
+                <span
+                    x-data
+                    x-show="$store.unread_count > 0"
+                    class="dot">
+                </span>
+            </a>
+
+            <div class="profile" id="profile">
+
+                <button
+                    class="profile-btn"
+                    id="profileBtn"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+
+                    <span class="avatar">0x</span>
+                    <span class="handle">You</span>
+                    <span class="caret">▾</span>
+
+                </button>
+
+                <div class="profile-menu">
+
+                    {% if is_admin() %}
+                    <a href="{{ url_for('admin.view') }}">
+                        Admin Panel
+                    </a>
+                    {% endif %}
+
+                    <a href="{{ url_for('users.private') }}">
+                        Profile
+                    </a>
+
+                    {% if Configs.user_mode == 'teams' %}
+                    <a href="{{ url_for('teams.private') }}">
+                        Team Settings
+                    </a>
+                    {% endif %}
+
+                    <a href="{{ url_for('views.settings') }}">
+                        Settings
+                    </a>
+
+                    <div class="divider"></div>
+
+                    <a href="{{ url_for('auth.logout') }}">
+                        Logout
+                    </a>
+
+                </div>
+            </div>
+
+            {% else %}
+
+            <div class="profile" id="profile">
+
+                <button
+                    class="profile-btn"
+                    id="profileBtn"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+
+                    <span class="avatar">?</span>
+                    <span class="handle">You</span>
+                    <span class="caret">▾</span>
+
+                </button>
+
+                <div class="profile-menu">
+
+                    <a href="{{ url_for('auth.login') }}">
+                        Login
+                    </a>
+
+                    {% if registration_visible() %}
+                    <a href="{{ url_for('auth.register') }}">
+                        Register
+                    </a>
+                    {% endif %}
+
+                </div>
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        <button
+            class="nav-toggle"
+            id="navToggle"
+            aria-label="Toggle menu">
+            ≡
+        </button>
+
+    </div>
 </header>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const toggle = document.getElementById("navToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    if (toggle && navLinks) {
+        toggle.addEventListener("click", () => {
+            navLinks.classList.toggle("open");
+        });
+    }
+
+    const profileBtn = document.getElementById("profileBtn");
+    const profile = document.getElementById("profile");
+
+    if (profileBtn && profile) {
+        profileBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            profile.classList.toggle("open");
+        });
+
+        document.addEventListener("click", () => {
+            profile.classList.remove("open");
+        });
+    }
+
+});
+</script>

@@ -14,8 +14,6 @@
 
   {{ Plugins.styles }}
 
-  <!-- {{ Assets.js("assets/js/color_mode_switcher.js", type=None) }} -->
-  <!-- not needed -->
 
   <script type="text/javascript">
       window.init = {
@@ -38,22 +36,26 @@
       }
   </script>
 
-  {{ Configs.theme_header }}
 </head>
 <body>
-{% include "components/navbar.html" %}
+<pre id="hexdump-bg"></pre>
+<div class="fade-bottom"></div>
+<div class="frame"></div>
 
-<main role="main">
-  {% block content %}
-  {% endblock %}
-</main>
+<div class="page">
+  {% include "components/navbar.html" %}
 
-{% include "components/snackbar.html" %}
+  <main class="hero">
+    {% block content %}
+    {% endblock %}
+  </main>
 
-<footer class="footer">
-        h4ckc0n // flag format: d4rk{...}c0de // ctfd
-</footer>
+  {% include "components/snackbar.html" %}
 
+  <footer class="footer">
+          h4ckc0n // flag format: d4rk{...}c0de // ctfd
+  </footer>
+</div>
 {% include "components/notifications.html" %}
 
 {% block scripts %}
@@ -63,5 +65,68 @@
 {{ Plugins.scripts }}
 
 {{ Configs.theme_footer }}
+
+
+<script>
+/* ---------------- hexdump background ---------------- */
+
+const hexEl = document.getElementById("hexdump-bg");
+const HEX_CHARS = "0123456789abcdef";
+const ASCII_POOL = ".,:;!?#@$%&*+-_=/\\|<>[]{}()01";
+
+function randomHexByte(){
+    return HEX_CHARS[Math.floor(Math.random()*16)] + HEX_CHARS[Math.floor(Math.random()*16)];
+}
+function randomAsciiChar(){
+    return ASCII_POOL[Math.floor(Math.random()*ASCII_POOL.length)];
+}
+
+let hexLines = [];
+
+function buildHexdump(){
+    const charWidth = 7.2;
+    const lineHeight = 18;
+    const cols = Math.max(8, Math.floor(window.innerWidth / charWidth));
+    const rows = Math.max(8, Math.floor(window.innerHeight / lineHeight));
+    const bytesPerRow = 16;
+    hexLines = [];
+    let addr = 0;
+
+    for(let y=0;y<rows;y++){
+        const addrStr = addr.toString(16).padStart(8,"0");
+        let bytes = [];
+        let ascii = "";
+        for(let i=0;i<bytesPerRow;i++){
+            bytes.push(randomHexByte());
+            ascii += randomAsciiChar();
+        }
+        hexLines.push(`${addrStr}  ${bytes.join(" ")}  |${ascii}|`);
+        addr += bytesPerRow;
+    }
+    hexEl.textContent = hexLines.join("\n");
+}
+
+buildHexdump();
+window.addEventListener("resize", buildHexdump);
+
+setInterval(() => {
+    if(hexLines.length === 0) return;
+    for(let i=0;i<2;i++){
+        const y = Math.floor(Math.random() * hexLines.length);
+        const addrStr = (y*16).toString(16).padStart(8,"0");
+        let bytes = [];
+        let ascii = "";
+        for(let j=0;j<16;j++){
+            bytes.push(randomHexByte());
+            ascii += randomAsciiChar();
+        }
+        hexLines[y] = `${addrStr}  ${bytes.join(" ")}  |${ascii}|`;
+    }
+    hexEl.textContent = hexLines.join("\n");
+}, 320);
+
+
+</script>
+
 </body>
 </html>
