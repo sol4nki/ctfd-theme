@@ -6,11 +6,11 @@
 
     <div class="text-center mb-5">
         <h1 class="h1">
-            USERS<span class="accent">.SYS</span>
+            USERS
         </h1>
 
         {% if q %}
-        <div class="alert alert-dark border mt-3 mb-4">
+        <div class="alert alert-dark border-opacity-25 mt-3 mb-4">
             <strong>Search Results</strong>
 
             {% if field %}
@@ -21,10 +21,6 @@
 
             <span class="hl ms-2">{{ q }}</span>
         </div>
-        {% else %}
-        <p class="tagline">
-            Public operator database.
-        </p>
         {% endif %}
     </div>
 
@@ -52,11 +48,10 @@
 
                     <div class="col-lg-2">
                         <button
-                            class="btn primary w-100"
+                            class="btn search primary w-100"
                             type="submit"
                         >
-                            SEARCH
-                        </button>
+                            SEARCH</button>
                     </div>
 
                 </div>
@@ -79,17 +74,17 @@
 
                 <thead>
                     <tr>
-                        <th style="width:45%">
+                        <th style="width:30%">
                             USER
                         </th>
 
-                        <th style="width:8%">
+                        <th style="width:25%">
                             WEB
                         </th>
 
                         <th
                             class="d-none d-md-table-cell"
-                            style="width:32%"
+                            style="width:20%"
                         >
                             AFFILIATION
                         </th>
