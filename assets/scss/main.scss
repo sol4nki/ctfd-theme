@@ -91,14 +91,15 @@ button{font-family:inherit;cursor:pointer;}
     z-index:20;
 }
 
-.nav-inner{
-    max-width:1240px;
-    margin:0 auto;
-    padding:0 1.5rem;
-    height:60px;
-    display:flex;
-    align-items:center;
-    gap:2rem;
+.nav-inner {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
 }
 
 .brand{

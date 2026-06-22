@@ -10,32 +10,24 @@
             {% if Configs.account_visibility != 'admins' %}
             <a
                 href="{{ url_for('users.listing') }}"
-                class="{{ 'active' if request.endpoint == 'users.listing' else '' }}">
-                Users
-            </a>
+                class="{{ 'active' if request.endpoint == 'users.listing' else '' }}">Users</a>
             {% endif %}
 
             {% if Configs.user_mode == 'teams' and Configs.account_visibility != 'admins' %}
             <a
                 href="{{ url_for('teams.listing') }}"
-                class="{{ 'active' if request.endpoint == 'teams.listing' else '' }}">
-                Teams
-            </a>
+                class="{{ 'active' if request.endpoint == 'teams.listing' else '' }}">Teams</a>
             {% endif %}
 
             {% if Configs.account_visibility != 'admins' and Configs.score_visibility != 'admins' %}
             <a
                 href="{{ url_for('scoreboard.listing') }}"
-                class="{{ 'active' if request.endpoint == 'scoreboard.listing' else '' }}">
-                Scoreboard
-            </a>
+                class="{{ 'active' if request.endpoint == 'scoreboard.listing' else '' }}">Scoreboard</a>
             {% endif %}
 
             <a
                 href="{{ url_for('challenges.listing') }}"
-                class="{{ 'active' if request.endpoint == 'challenges.listing' else '' }}">
-                Challenges
-            </a>
+                class="{{ 'active' if request.endpoint == 'challenges.listing' else '' }}">Challenges</a>
 
             {% for page in Plugins.user_menu_pages %}
             <a href="{{ page.route }}">
@@ -44,7 +36,8 @@
             {% endfor %}
 
         </nav>
-        
+        <div style="flex:1;">
+        </div>
         <div class="nav-right">
 
             {% if authed() %}
