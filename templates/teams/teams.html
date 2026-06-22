@@ -1,153 +1,226 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="jumbotron">
-    <div class="container">
-      <h1>{% trans %}Teams{% endtrans %}</h1>
-    </div>
-  </div>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        {% if q and field %}
-          <h5 class="text-muted text-center">
-            Searching for teams with <strong>{{ field }}</strong> matching <strong>{{ q }}</strong>
-          </h5>
-          <h6 class="text-muted text-center pb-3">
-            Page {{ teams.page }} of {{ teams.total }} results
-          </h6>
+<div class="container">
+
+    <div class="text-center mb-5">
+        <h1 class="h1">
+            TEAMS
+        </h1>
+
+        {% if q %}
+        <div class="alert alert-dark border-opacity-25 mt-3 mb-4">
+            <strong>Search Results</strong>
+
+            {% if field %}
+            <span class="text-muted">
+                ({{ field|replace('_', ' ')|title }})
+            </span>
+            {% endif %}
+
+            <span class="hl ms-2">{{ q }}</span>
+        </div>
         {% endif %}
-
-        {% with form = Forms.teams.PublicTeamSearchForm(field=field, q=q) %}
-          <form method="GET" class="row justify-content-around align-items-center">
-            <div class="mb-3 col-md-2">
-              {{ form.field(class="form-select w-100") }}
-            </div>
-
-            <div class="mb-3 col-md-8">
-              {{ form.q(class="form-control w-100", placeholder="Search for matching teams") }}
-            </div>
-
-            <div class="mb-3 col-md-2">
-              <button type="submit" class="btn btn-primary w-100">
-                <i class="fas fa-search" aria-hidden="true"></i>
-              </button>
-            </div>
-          </form>
-        {% endwith %}
-      </div>
     </div>
 
-    <hr>
 
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table table-striped align-middle">
-          <thead>
-          <tr>
-            <th class="text-md-start">{% trans %}Team{% endtrans %}</th>
-            <th>{% trans %}Website{% endtrans %}</th>
-            <th class="d-none d-md-table-cell">{% trans %}Affiliation{% endtrans %}</th>
-            <th class="d-none d-md-table-cell">{% trans %}Country{% endtrans %}</th>
-          </tr>
-          </thead>
-          <tbody>
+    {% with form = Forms.teams.PublicTeamSearchForm(field=field, q=q) %}
+    <div class="status-panel mb-4">
 
-          {% for team in teams.items %}
-            <tr>
-              <td>
-                {% if scores_visible() %}
-                  <a href="{{ url_for('teams.public', team_id=team.id) }}">{{ team.name | truncate(50) }}</a>
-                {% else %}
-                  <span>{{ team.name | truncate(50) }}</span>
-                {% endif %}
+        <div class="status-head">
+            <span>Search</span>
+        </div>
 
-                {% if team.bracket_id %}
-                  <span class="badge bg-secondary ms-2">{{ team.bracket.name }}</span>
-                {% endif %}
+        <div class="p-4">
 
-                {% if team.oauth_id %}
-                  <a href="https://majorleaguecyber.org/t/{{ team.name }}">
-                    <span class="badge bg-primary ms-2">Official</span>
-                  </a>
-                {% endif %}
-              </td>
+            <form method="GET">
+                <div class="row g-3 align-items-center">
 
-              <td style="width: 10px;">
-                {% if team.website and (team.website.startswith('http://') or team.website.startswith('https://')) %}
-                  <a href="{{ team.website }}" target="_blank" rel="noopener">
-                    <i
-                        class="fas fa-external-link-alt"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="{{ team.website }}"
-                    ></i>
-                  </a>
-                {% endif %}
-              </td>
+                    <div class="col-lg-3">
+                        {{ form.field(class="form-select") }}
+                    </div>
 
-              <td class="d-none d-md-table-cell">
-                {% if team.affiliation %}
+                    <div class="col-lg-7">
+                        {{ form.q(
+                            class="form-control",
+                            placeholder="Search for teams"
+                        ) }}
+                    </div>
 
-                  {% if team.affiliation | length > 50 %}
-                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ team.affiliation }}">
-                        {% if team.affiliation %}{{ team.affiliation | truncate(50) }}{% endif %}
-                    </span>
-                  {% else %}
-                    <span>
-                      {% if team.affiliation %}
-                        {{ team.affiliation | truncate(50) }}
-                      {% endif %}
-                    </span>
-                  {% endif %}
+                    <div class="col-lg-2">
+                        <button class="btn primary search w-100" type="submit">
+                            SEARCH
+                        </button>
+                    </div>
 
-                {% endif %}
-              </td>
+                </div>
+            </form>
 
-              <td class="d-none d-md-table-cell">
-							<span>
-								{% if team.country %}
-                  <i class="flag-{{ team.country.lower() }}"></i>
-                  {{ lookup_country_code(team.country) }}
-                {% endif %}
-							</span>
-              </td>
-            </tr>
-          {% endfor %}
+        </div>
 
-          </tbody>
-        </table>
-      </div>
     </div>
+    {% endwith %}
+
+
+    <div class="status-panel">
+
+        <div class="status-head">
+            <span>Results</span>
+            <span>{{ teams.total }} TEAMS</span>
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table users-table table-hover mb-0">
+
+                <thead>
+                    <tr>
+                        <th style="width:40%">TEAM</th>
+                        <th style="width:15%">WEB</th>
+                        <th class="d-none d-md-table-cell" style="width:25%">AFFILIATION</th>
+                        <th class="d-none d-md-table-cell" style="width:20%">COUNTRY</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for team in teams.items %}
+                <tr>
+
+                    <td>
+
+                        {% if scores_visible() %}
+                        <a
+                            class="user-link truncate-cell"
+                            href="{{ url_for('teams.public', team_id=team.id) }}"
+                            title="{{ team.name }}"
+                        >
+                            {{ team.name }}
+                        </a>
+                        {% else %}
+                        <span class="truncate-cell" title="{{ team.name }}">
+                            {{ team.name }}
+                        </span>
+                        {% endif %}
+
+                        {% if team.bracket_id %}
+                        <span class="badge bg-secondary ms-2">
+                            {{ team.bracket.name }}
+                        </span>
+                        {% endif %}
+
+                        {% if team.oauth_id %}
+                        <a
+                            href="https://majorleaguecyber.org/t/{{ team.name }}"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            <span class="badge bg-success ms-2">
+                                OFFICIAL
+                            </span>
+                        </a>
+                        {% endif %}
+
+                    </td>
+
+
+                    <td class="text-center">
+
+                        {% if team.website and (
+                            team.website.startswith('http://')
+                            or team.website.startswith('https://')
+                        ) %}
+                        <a
+                            href="{{ team.website }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="{{ team.website }}"
+                        >
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </td>
+
+                    <td class="d-none d-md-table-cell">
+
+                        {% if team.affiliation %}
+                        <span
+                            class="truncate-cell"
+                            title="{{ team.affiliation }}"
+                        >
+                            {{ team.affiliation }}
+                        </span>
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </td>
+
+
+                    <td class="d-none d-md-table-cell">
+
+                        {% if team.country %}
+                            <i class="flag-{{ team.country.lower() }}"></i>
+                            {{ lookup_country_code(team.country) }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
 
     {% if teams.pages > 1 %}
-      <div class="row">
-        <div class="col-md-12">
-          <div class="text-center">
-            {% trans %}Page{% endtrans %} <br>
+    <div class="text-center mt-4">
 
-            {% if teams.page != 1 %}
-              <a href="{{ prev_page }}">&lt;&lt;&lt;</a>
-            {% endif %}
+        {% if teams.page > 1 %}
+        <a
+            class="btn ghost"
+            href="{{ prev_page }}"
+        >
+            <<< PREV
+        </a>
+        {% endif %}
 
-            <select class="page-select">
-              {% for page in range(1, teams.pages + 1) %}
-                <option {% if teams.page == page %}selected{% endif %}>{{ page }}</option>
-              {% endfor %}
-            </select>
+        <select class="page-select form-select d-inline-block mx-2">
+            {% for page in range(1, teams.pages + 1) %}
+            <option {% if teams.page == page %}selected{% endif %}>
+                {{ page }}
+            </option>
+            {% endfor %}
+        </select>
 
-            {% if teams.next_num %}
-              <a href="{{ next_page }}">&gt;&gt;&gt;</a>
-            {% endif %}
-          </div>
-        </div>
-      </div>
+        {% if teams.next_num %}
+        <a
+            class="btn ghost"
+            href="{{ next_page }}"
+        >
+            NEXT >>>
+        </a>
+        {% endif %}
+
+    </div>
     {% endif %}
 
-  </div>
+</div>
+
 {% endblock %}
 
+
 {% block scripts %}
-  {{ Assets.js("assets/js/teams/list.js") }}
+{{ Assets.js("assets/js/teams/list.js") }}
 {% endblock %}
