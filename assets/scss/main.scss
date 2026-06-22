@@ -504,3 +504,52 @@ h1.logo .accent{color:var(--accent);}
     background:var(--accent-dim);
     color:var(--accent);
 }
+
+.table-hover tbody tr:hover {
+    background-color: #119944 !important;
+    color: #ffffff !important;
+}
+
+.notification-card {
+    transition: all 0.2s ease-in-out;
+    border-left: 3px solid transparent;
+}
+
+.notification-card:hover {
+    border-left: 3px solid #119944;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Notification text readability */
+.notification-body {
+    text-align: left;
+    color: inherit;
+    line-height: 1.6;
+}
+
+/* Ensure HTML inside notification doesn't break layout */
+.notification-body p {
+    margin-bottom: 0.5rem;
+}
+
+.notification-body a {
+    color: #119944;
+    text-decoration: none;
+}
+
+.notification-body a:hover {
+    text-decoration: underline;
+}
+
+/* Optional: time styling */
+.status-head span:last-child {
+    opacity: 0.7;
+    font-size: 0.9em;
+}
+
+.notif-time {
+    color: #119944;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
