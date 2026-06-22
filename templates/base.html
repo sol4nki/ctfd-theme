@@ -38,23 +38,131 @@
 
 </head>
 <body>
-<pre id="hexdump-bg"></pre>
-<div class="fade-bottom"></div>
-<div class="frame"></div>
+{% if request.path == "/" %}
+  <pre id="hexdump-bg"></pre>
+  <div class="fade-bottom"></div>
+  <div class="frame"></div>
+  <script>
+    /* ---------------- hexdump background ---------------- */
+
+    const hexEl = document.getElementById("hexdump-bg");
+    const HEX_CHARS = "0123456789abcdef";
+    const ASCII_POOL = ".,:;!?#@$%&*+-_=/\\|<>[]{}()01";
+
+    function randomHexByte(){
+        return HEX_CHARS[Math.floor(Math.random()*16)] + HEX_CHARS[Math.floor(Math.random()*16)];
+    }
+    function randomAsciiChar(){
+        return ASCII_POOL[Math.floor(Math.random()*ASCII_POOL.length)];
+    }
+
+    let hexLines = [];
+
+    function buildHexdump(){
+        const charWidth = 7.2;
+        const lineHeight = 18;
+        const cols = Math.max(8, Math.floor(window.innerWidth / charWidth));
+        const rows = Math.max(8, Math.floor(window.innerHeight / lineHeight));
+        const bytesPerRow = 16;
+        hexLines = [];
+        let addr = 0;
+
+        for(let y=0;y<rows;y++){
+            const addrStr = addr.toString(16).padStart(8,"0");
+            let bytes = [];
+            let ascii = "";
+            for(let i=0;i<bytesPerRow;i++){
+                bytes.push(randomHexByte());
+                ascii += randomAsciiChar();
+            }
+            hexLines.push(`${addrStr}  ${bytes.join(" ")}  |${ascii}|`);
+            addr += bytesPerRow;
+        }
+        hexEl.textContent = hexLines.join("\n");
+    }
+
+    buildHexdump();
+    window.addEventListener("resize", buildHexdump);
+
+    setInterval(() => {
+        if(hexLines.length === 0) return;
+        for(let i=0;i<2;i++){
+            const y = Math.floor(Math.random() * hexLines.length);
+            const addrStr = (y*16).toString(16).padStart(8,"0");
+            let bytes = [];
+            let ascii = "";
+            for(let j=0;j<16;j++){
+                bytes.push(randomHexByte());
+                ascii += randomAsciiChar();
+            }
+            hexLines[y] = `${addrStr}  ${bytes.join(" ")}  |${ascii}|`;
+        }
+        hexEl.textContent = hexLines.join("\n");
+    }, 320);
+
+
+    </script>
+{% endif %}
+
 
 <div class="page">
   {% include "components/navbar.html" %}
 
   <main class="hero">
+    {% if request.path == "/" %}
+  
+    <div class="eyebrow">2026 // REGISTRATION OPEN</div>
+
+    <h1 class="logo" id="logoText">h4ckc0n</h1>
+
+    <!-- <p class="tagline">A <span class="hl">jeopardy-style</span> capture-the-flag for people who read disassembly for fun. Pick a category, pop a shell, submit the flag.</p> -->
+
+    <div class="status-panel" style=" max-width: 640px;">
+      <div class="status-grid" style="display: flex; flex-direction: column;">
+        <div class="num countdown" id="statCountdown" style="padding-bottom: 0px; font-size: 5rem;">00:00:00:00</div>
+        <div class="label" style="padding-top: 0px;">Time remaining</div>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      {% if authed() %}
+        <!-- <a class="btn primary" href="/profile">Profile</a> -->
+        <a class="btn primary" href="/challenges" style="display:flex;align-items:center;">
+          View challenges
+        </a>
+      {% else %}
+        <a class="btn primary" href="/login">Login/SignUp</a>
+        <a class="btn ghost" href="/challenges" style="display:flex;align-items:center;">
+          View challenges
+        </a>
+      {% endif %}
+    </div>
+    {% endif %}
+    <!-- no block content for the homepage i m just pasting it here -->
+
     {% block content %}
     {% endblock %}
   </main>
 
+
+  {% if request.path == "/" %}
+  <section class="categories" id="challenges">
+    <div class="categories-inner">
+      <!-- will it work? figure out #web section jump using id -->
+      <a class="cat-chip" href="challenges#WEB">WEB</a>
+      <a class="cat-chip" href="challenges#PWN">PWN</a>
+      <a class="cat-chip" href="challenges#">CRYPTO</a>
+      <a class="cat-chip" href="challenges#">REV</a>
+      <a class="cat-chip" href="challenges#">FORENSICS</a>
+      <a class="cat-chip" href="challenges#">MISC</a>
+      <a class="cat-chip" href="challenges#">OSINT</a>
+    </div>
+  </section>
+  {% endif %}
+
   {% include "components/snackbar.html" %}
 
-  <footer class="footer">
-          h4ckc0n // flag format: d4rk{...}c0de // ctfd
-  </footer>
+  <footer class="footer">h4ckc0n // flag format: d4rk{...}c0de // ctfd</footer>
 </div>
 {% include "components/notifications.html" %}
 
@@ -67,66 +175,7 @@
 {{ Configs.theme_footer }}
 
 
-<script>
-/* ---------------- hexdump background ---------------- */
 
-const hexEl = document.getElementById("hexdump-bg");
-const HEX_CHARS = "0123456789abcdef";
-const ASCII_POOL = ".,:;!?#@$%&*+-_=/\\|<>[]{}()01";
-
-function randomHexByte(){
-    return HEX_CHARS[Math.floor(Math.random()*16)] + HEX_CHARS[Math.floor(Math.random()*16)];
-}
-function randomAsciiChar(){
-    return ASCII_POOL[Math.floor(Math.random()*ASCII_POOL.length)];
-}
-
-let hexLines = [];
-
-function buildHexdump(){
-    const charWidth = 7.2;
-    const lineHeight = 18;
-    const cols = Math.max(8, Math.floor(window.innerWidth / charWidth));
-    const rows = Math.max(8, Math.floor(window.innerHeight / lineHeight));
-    const bytesPerRow = 16;
-    hexLines = [];
-    let addr = 0;
-
-    for(let y=0;y<rows;y++){
-        const addrStr = addr.toString(16).padStart(8,"0");
-        let bytes = [];
-        let ascii = "";
-        for(let i=0;i<bytesPerRow;i++){
-            bytes.push(randomHexByte());
-            ascii += randomAsciiChar();
-        }
-        hexLines.push(`${addrStr}  ${bytes.join(" ")}  |${ascii}|`);
-        addr += bytesPerRow;
-    }
-    hexEl.textContent = hexLines.join("\n");
-}
-
-buildHexdump();
-window.addEventListener("resize", buildHexdump);
-
-setInterval(() => {
-    if(hexLines.length === 0) return;
-    for(let i=0;i<2;i++){
-        const y = Math.floor(Math.random() * hexLines.length);
-        const addrStr = (y*16).toString(16).padStart(8,"0");
-        let bytes = [];
-        let ascii = "";
-        for(let j=0;j<16;j++){
-            bytes.push(randomHexByte());
-            ascii += randomAsciiChar();
-        }
-        hexLines[y] = `${addrStr}  ${bytes.join(" ")}  |${ascii}|`;
-    }
-    hexEl.textContent = hexLines.join("\n");
-}, 320);
-
-
-</script>
 
 </body>
 </html>
