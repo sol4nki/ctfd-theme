@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">Frequently Asked Questions</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <details class="card p-3 mb-3">
+                <summary class="fw-bold">How do I register for a team?</summary>
+                <p class="mt-2">You can create or join a team through the 'Teams' tab in the navigation bar after logging in.</p>
+            </details>
+
+            <details class="card p-3 mb-3">
+                <summary class="fw-bold">What if I find a bug in a challenge?</summary>
+                <p class="mt-2">Please report it immediately to the admins. Include the challenge name and a screenshot of the issue if possible.</p>
+            </details>
+
+            <details class="card p-3 mb-3">
+                <summary class="fw-bold">Are hints available?</summary>
+                <p class="mt-2">Some challenges have hints available. Check the challenge description—some may cost points to unlock.</p>
+            </details>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">Competition Rules</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h3>1. Fair Play</h3>
+                <p>Do not share flags with other participants. Brute-forcing the challenge servers or using automated tools to flood the infrastructure is strictly prohibited.</p>
+                
+                <h3>2. Infrastructure Integrity</h3>
+                <p>You are here to solve challenges. Any attempt to attack the host environment, gain unauthorized access to the server, or compromise other participants' accounts will result in immediate disqualification.</p>
+                
+                <h3>3. Flag Format</h3>
+                <p>All flags must be submitted in the format <code>h4ckc0n{flag_content}</code>.</p>
+                
+                <h3>4. Support</h3>
+                <p>If you encounter a broken challenge or an issue with the platform, please contact the administrators via the official support channel.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
