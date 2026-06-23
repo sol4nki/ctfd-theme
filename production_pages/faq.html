@@ -1,25 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container py-5">
-    <h1 class="text-center mb-4">Frequently Asked Questions</h1>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <details class="card p-3 mb-3">
-                <summary class="fw-bold">How do I register for a team?</summary>
-                <p class="mt-2">You can create or join a team through the 'Teams' tab in the navigation bar after logging in.</p>
+<main class="hero">
+    <div class="container" style="max-width: 800px; margin: auto; padding: 2rem;">
+        <h1 class="text-center">Frequently Asked Questions</h1>
+        <hr>
+        
+        <div class="faq-container">
+            <details class="card p-3 mb-3" style="border: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; padding: 10px;">
+                <summary class="fw-bold" style="cursor: pointer; font-weight: bold;">What is the flag format?</summary>
+                <p class="mt-2" style="padding-top: 10px;">All flags follow the format: <code>d4rk{flag_content}</code>. Please ensure you submit the exact string, including the braces.</p>
             </details>
 
-            <details class="card p-3 mb-3">
-                <summary class="fw-bold">What if I find a bug in a challenge?</summary>
-                <p class="mt-2">Please report it immediately to the admins. Include the challenge name and a screenshot of the issue if possible.</p>
+            <details class="card p-3 mb-3" style="border: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; padding: 10px;">
+                <summary class="fw-bold" style="cursor: pointer; font-weight: bold;">How do I report a broken challenge?</summary>
+                <p class="mt-2" style="padding-top: 10px;">If a challenge seems broken or unreachable, please contact an admin via our official support channel with the challenge name and a brief description of the issue.</p>
             </details>
 
-            <details class="card p-3 mb-3">
-                <summary class="fw-bold">Are hints available?</summary>
-                <p class="mt-2">Some challenges have hints available. Check the challenge description—some may cost points to unlock.</p>
+            <details class="card p-3 mb-3" style="border: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; padding: 10px;">
+                <summary class="fw-bold" style="cursor: pointer; font-weight: bold;">Are we allowed to collaborate?</summary>
+                <p class="mt-2" style="padding-top: 10px;">Collaboration within your registered team is encouraged. However, sharing flags between different teams is strictly prohibited and will result in disqualification.</p>
+            </details>
+
+            <details class="card p-3 mb-3" style="border: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; padding: 10px;">
+                <summary class="fw-bold" style="cursor: pointer; font-weight: bold;">Can I use automated tools?</summary>
+                <p class="mt-2" style="padding-top: 10px;">Standard security tools are fine, but excessive automated scanning or brute-forcing that impacts the stability of our infrastructure is forbidden.</p>
             </details>
         </div>
     </div>
-</div>
+</main>
 {% endblock %}
