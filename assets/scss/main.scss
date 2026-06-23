@@ -553,3 +553,76 @@ h1.logo .accent{color:var(--accent);}
     font-size: 0.85rem;
     opacity: 0.9;
 }
+
+
+// for the scoreboard
+.active-filter {
+    background: #119944 !important;
+    border-color: #119944 !important;
+    color: #fff !important;
+}
+
+#scoreboard .btn.ghost:hover {
+    background: #119944;
+    border-color: #119944;
+    color: #fff;
+}
+
+#scoreboard .users-table tbody tr:nth-child(1) td:first-child {
+    color: gold;
+    font-weight: 700;
+}
+
+#scoreboard .users-table tbody tr:nth-child(2) td:first-child {
+    color: silver;
+    font-weight: 700;
+}
+
+#scoreboard .users-table tbody tr:nth-child(3) td:first-child {
+    color: #cd7f32;
+    font-weight: 700;
+}
+
+#score-graph {
+    min-height: 320px;
+}
+
+#score-graph canvas {
+    width: 100% !important;
+    height: 320px !important;
+}
+
+.page-select {
+    min-width: 140px;
+    background: #111;
+    color: #fff;
+    border: 1px solid #333;
+}
+
+.page-select:focus {
+    border-color: #119944;
+    box-shadow: 0 0 0 0.2rem rgba(17, 153, 68, 0.25);
+}
+
+.status-panel .btn.ghost {
+    transition: all 0.2s ease-in-out;
+}
+
+.status-panel .btn.ghost:hover {
+    background: #119944;
+    border-color: #119944;
+    color: #fff;
+}
+
+.users-table tbody tr:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.users-table tbody tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.01) !important;
+}
+
+.users-table.table-hover tbody tr:hover {
+    background-color: #119944 !important;
+    color: #ffffff !important;
+}
