@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container pt-5">
+    <h1 class="text-center">Frequently Asked Questions</h1>
+    <hr>
+    
+    <div class="mt-4">
+        <details class="card p-3 mb-3">
+            <summary class="fw-bold">What is the flag format?</summary>
+            <p class="mt-2">All flags follow the format: <code>d4rk{flag_content}c0de</code>. Please ensure you submit the exact string, including the braces.</p>
+        </details>
+
+        <details class="card p-3 mb-3">
+            <summary class="fw-bold">How do I report a broken challenge?</summary>
+            <p class="mt-2">If a challenge seems broken or unreachable, please contact an admin via our official support channel with the challenge name and a brief description of the issue.</p>
+        </details>
+
+        <details class="card p-3 mb-3">
+            <summary class="fw-bold">Are we allowed to collaborate?</summary>
+            <p class="mt-2">Collaboration within your registered team is encouraged. However, sharing flags between different teams is strictly prohibited and will result in disqualification.</p>
+        </details>
+
+        <details class="card p-3 mb-3">
+            <summary class="fw-bold">Can I use automated tools?</summary>
+            <p class="mt-2">Standard security tools are fine, but excessive automated scanning or brute-forcing that impacts the stability of our infrastructure is forbidden.</p>
+        </details>
+    </div>
+</div>
+{% endblock %}
