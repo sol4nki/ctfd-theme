@@ -1,56 +1,81 @@
-# core-beta
+# d4rkc0de-theme
 
-Rewritten version of the CTFd core theme to use Bootstrap 5, Alpine.js, and vite to improve upon the existing CTFd theme structure.
+Custom theme file for h4ckc0n based on the "Rewritten version of the CTFd core theme to use Bootstrap 5, Alpine.js, and vite to improve upon the existing CTFd theme structure."
 
-## Subtree Installation
+## Quick Setup (First Time Run)
 
-### Add repo to themes folder
+### 1. Clone CTFd
 
-```
-git subtree add --prefix CTFd/themes/core-beta git@github.com:CTFd/core-beta.git main --squash
-```
-
-### Pull latest changes to subtree
-
-```
-git subtree pull --prefix CTFd/themes/core-beta git@github.com:CTFd/core-beta.git main --squash
+```bash
+git clone https://github.com/CTFd/CTFd.git
+cd CTFd
 ```
 
-### Subtree Gotcha
+### 2. Add the custom theme
 
-Make sure to use Merge Commits when dealing with the subtree here. For some reason Github's squash and commit uses the wrong line ending which causes issues with the subtree script: https://stackoverflow.com/a/47190256.
+Inside the `CTFd/themes` directory:
 
-## Creating Custom Theme (based on core-beta)
+```bash
+cd CTFd/themes
+git clone https://github.com/sol4nki/ctfd-theme.git d4rkc0de-theme
+```
 
-To create a custom theme based on the core-beta one, here are the steps to follow:
+or simply drop the repo inside `themes/` if you have already cloned the repo. whatever you feel comfortable with
 
-1. Clone core-beta theme locally to a seperate folder
+---
 
-   ```
-   git clone https://github.com/CTFd/core-beta.git custom-theme
-   ```
+### 3. Start CTFd using Docker
 
-   To clarify the structure of the project, the `./assets` folder contains the uncompiled source files (the ones you can modify), while the `./static` directory contains the compiled ones.
+From the root of the CTFd repo:
 
-2. Install [Yarn](https://classic.yarnpkg.com/en/) following the [official installation guides](https://classic.yarnpkg.com/en/docs/install).
+```bash
+docker compose up
+```
 
-   - **Yarn** is a dependency management tool used to install and manage project packages
-   - **[Vite](https://vite.dev/guide/)** handles the frontend tooling in CTFd by building optimized assets that are served through Flask.
+wait for some time and youll have your site all working on https://localhost:8000
 
-3. Run `yarn install` in the root of `custom-theme` folder to install the necessary Node packages including `vite`.
+---
 
-4. Run the appropriate yarn build mode:
+### 4. First Login
 
-   - Run `yarn dev` (this will run `vite build --watch`) while developing the theme.
-   - Run `yarn build` (which will run `vite build`) for a one-time build.
-     Vite allows you to preview changes instantly with hot reloading.
+Open the site (https://localhost:8000 most prolly) in your browser and register/login with any random credentials.
 
-5. Now, you can start your modifications in the `assets` folder. Each time you save, Vite will automatically recompile everything (assuming you are using `yarn dev`), and you can directly see the result by importing your compiled theme into a CTFd instance.
-   Note: You do not need the `node_modules` folder, you can simply zip the theme directory without it.
+> [!CAUTION] 
+> Just make sure you remember the password you enter (learned the hard way :sob:).
 
-6. When you are ready you can use `yarn build` to build the production copy of your theme.
+---
+
+### 5. Enable Theme
+
+After logging in:
+
+* Go to **Admin Panel**
+* Open **Config**
+* Scroll to **Themes**
+* Select `d4rkc0de-theme`
+* Save changes
+
+---
+
+### 6. Voila :))))))
+
+Refresh the homepage and your custom theme should now be active.
+
+You can now start tweaking and experimenting freely.
+
+
+## Development Notes
+
+This theme is based on CTFd’s core frontend structure and modernized using Vite for faster frontend builds.
+
+### Key Stack
+
+* Bootstrap 5
+* Alpine.js
+* Vite
+
+
 
 ## Todo
 
-- Document how we are using Vite
-- Create a cookie cutter template package to use with Vite
+- alot.
